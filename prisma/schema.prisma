@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../../generated/prisma"
 }
 
 datasource db {
@@ -15,9 +14,8 @@ datasource db {
 }
 
 model FitbitData {
-  id         Int      @id @default(autoincrement())
-  userId     String
-  steps      Int?
-  date       DateTime
-  createdAt  DateTime @default(now())
+  id     Int      @id @default(autoincrement())
+  userId String
+  steps  Int
+  date   DateTime
 }
