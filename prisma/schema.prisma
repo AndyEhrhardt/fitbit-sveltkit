@@ -19,3 +19,4 @@ model FitbitData {
   steps  Int
   date   DateTime
 }
+

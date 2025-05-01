@@ -1,4 +1,13 @@
 import { fail, redirect } from '@sveltejs/kit';
+import { prisma } from '$lib/server/prisma'; // Adjust the import based on your project structure
+
+export const load = async () => {
+    const entries = await prisma.fitbitData.findMany({
+      orderBy: { date: 'desc' }
+    });
+  
+    return { entries };
+  };  
 
 export const actions = {
   submit: async ({ request }) => {
@@ -11,17 +20,17 @@ export const actions = {
     }
 
     try {
-      await prisma.FitbitData.create({
+      await prisma.fitbitData.create({
         data: {
-          userId: 'placeholder-user-id', // we'll replace this later with OAuth userId
+          userId: 'placeholder-user-id',
           steps,
           date
         }
       });
 
-      throw redirect(303, '/success'); // or wherever you want to send them after
+      throw redirect(303, '/steps');
     } catch (error) {
-      console.error('Error saving data:', error);c
+      console.error('Error saving data:', error);
       return fail(500, { error: 'Database error.' });
     }
   }
