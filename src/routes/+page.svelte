@@ -3,6 +3,7 @@
 <p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
 <p>yoooooo</p>
 <a href={fitbitAuthUrl}>Connect to FitBit</a>
+<a href="/steps">steps</a>
 
 <script>
     

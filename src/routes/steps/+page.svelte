@@ -8,8 +8,8 @@
     }[];
   };
 
-  let steps = '';
-  let date = '';
+  let steps = "";
+  let date = "";
 </script>
 
 <form method="POST" action="?/submit">
@@ -27,9 +27,21 @@
 <h2>Previous Entries</h2>
 {#if data.entries.length > 0}
   <ul>
-    {#each data.entries as entry}
+    {#each data.entries as entry (entry.id)}
       <li>
-        {entry.date} — {entry.steps} steps
+        <form method="POST" action="?/edit">
+          <input type="hidden" name="id" value={entry.id} />
+
+          <input type="number" name="steps" value={entry.steps} required />
+
+          <input type="date" name="date" value={new Date(entry.date).toISOString().slice(0, 10)} required />
+
+          <button type="submit">💾 Save</button>
+        </form>
+        <form method="POST" action="?/delete" style="display: inline;">
+          <input type="hidden" name="id" value={entry.id} />
+          <button type="submit" aria-label="Delete entry">🗑️</button>
+        </form>
       </li>
     {/each}
   </ul>
