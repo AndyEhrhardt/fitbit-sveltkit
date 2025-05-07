@@ -21,7 +21,7 @@ export const GET = async ({ url }) => {
       client_id: clientId,
       grant_type: "authorization_code",
       redirect_uri: redirectUri,
-      code,
+      code: code || "",
     }),
   });
 
