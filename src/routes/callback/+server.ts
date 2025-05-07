@@ -1,9 +1,11 @@
-// src/routes/callback/+server.ts
 import { json, redirect } from "@sveltejs/kit";
-// import env
 import { env } from "$env/dynamic/private";
+
 export const GET = async ({ url }) => {
   const code = url.searchParams.get("code");
+  if (!code) {
+    return json({ error: 'Missing code' }, { status: 400 });
+  }
   const clientId = env.OAUTH2_CLIENT_ID;
   const clientSecret = env.FIT_BIT_SECRET;
   const redirectUri = "http://localhost:5173/callback";
@@ -21,7 +23,7 @@ export const GET = async ({ url }) => {
       client_id: clientId,
       grant_type: "authorization_code",
       redirect_uri: redirectUri,
-      code: code || "",
+      code,
     }),
   });
 
@@ -29,6 +31,5 @@ export const GET = async ({ url }) => {
 
   console.log("Fitbit token response:", data); // access_token, refresh_token, etc.
 
-  // You might want to redirect or return JSON for testing
-  return json(data);
+  return redirect(302, '/success'); 
 };
