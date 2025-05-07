@@ -9,7 +9,7 @@
     
     const clientId = '23Q8CK'; // Replace with your actual client ID
 const redirectUri = 'http://localhost:5173/callback'; // Update this based on your setup
-const scope = 'activity heartrate sleep'; // adjust as needed
+const scope = 'activity	heartrate	sleep	nutrition	weight	temperature	respiratory_rate'; 
 
 const fitbitAuthUrl = `https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}&expires_in=604800`;
   </script>
