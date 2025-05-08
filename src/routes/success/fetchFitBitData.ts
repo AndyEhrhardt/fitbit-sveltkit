@@ -1,7 +1,7 @@
 const BASE_URL = 'https://api.fitbit.com/1/user/-';
 
 export async function fetchFitBitData() {
-  const accessToken = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyM1E4Q0siLCJzdWIiOiJDRlpZVkciLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJycmVzIHJ3ZWkgcmFjdCByaHIgcnNsZSIsImV4cCI6MTc0NjY3ODAyNCwiaWF0IjoxNzQ2NjQ5MjI0fQ.Occp5AOd3zNp1Xm1y47yIenlEXS9fMDQnjoDpmSxgRE'
+  const accessToken = ''
 
   const today = new Date().toISOString().split('T')[0]; // 'YYYY-MM-DD'
 
