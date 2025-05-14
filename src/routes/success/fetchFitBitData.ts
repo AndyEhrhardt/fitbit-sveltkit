@@ -1,44 +1,61 @@
-const BASE_URL = 'https://api.fitbit.com/1/user/-';
+const BASE_URL = "https://api.fitbit.com/1/user/-";
 
-export async function fetchFitBitData() {
-  const accessToken = ''
-
-  const today = new Date().toISOString().split('T')[0]; // 'YYYY-MM-DD'
-
+export async function fetchFitBitData(accessToken: string) {
+  const today = new Date().toISOString().split("T")[0];
+  const yesterday = new Date(Date.now() - 86400000).toISOString().split("T")[0];
   const headers = {
-    Authorization: `Bearer ${accessToken}`
+    Authorization: `Bearer ${accessToken}`,
   };
 
-  console.log(`${BASE_URL}/heart/date/${today}/1d.json`)
-
-  const [sleepRes, 
-    hrRes, 
-    hrvRes, 
-    activityRes] = await Promise.all([
+  const [sleepResToday, hrvResToday, activityResToday] = await Promise.all([
     fetch(`${BASE_URL}/sleep/date/${today}.json`, { headers }),
-    fetch(`${BASE_URL}/activities/heart/date/${today}.json`, { headers }),
     fetch(`${BASE_URL}/hrv/date/${today}.json`, { headers }),
-    fetch(`${BASE_URL}/activities/date/${today}.json`, { headers })
+    fetch(`${BASE_URL}/activities/date/${today}.json`, { headers }),
   ]);
+  // fetch yesterdays data as well
+  const [sleepResYesterday, hrvResYesterday, activityResYesterday] =
+    await Promise.all([
+      fetch(`${BASE_URL}/sleep/date/${yesterday}.json`, { headers }),
+      fetch(`${BASE_URL}/hrv/date/${yesterday}.json`, { headers }),
+      fetch(`${BASE_URL}/activities/date/${yesterday}.json`, { headers }),
+    ]);
 
-    console.log("Sleep response:", sleepRes);
-    console.log("Heart response:", hrRes);
-    console.log("HRV response:", hrvRes);
-    console.log("Activity response:", activityRes);
-
-  if (!sleepRes.ok || !hrRes.ok  || !hrvRes.ok || !activityRes.ok) {
-    throw new Error('Failed to fetch one or more Fitbit endpoints.');
+  if (!sleepResToday.ok || !hrvResToday.ok || !activityResToday.ok) {
+    throw new Error("Failed to fetch one or more Fitbit endpoints for today.");
+  }
+  if (
+    !sleepResYesterday.ok ||
+    !hrvResYesterday.ok ||
+    !activityResYesterday.ok
+  ) {
+    throw new Error(
+      "Failed to fetch one or more Fitbit endpoints for yesterday."
+    );
   }
 
-  const sleep = await sleepRes.json();
-  const heart = await hrRes.json();
-  const hrv = await hrvRes.json();
-  const activity = await activityRes.json();
+  const sleepToday = await sleepResToday.json();
+
+  const hrvToday = await hrvResToday.json();
+  const activityToday = await activityResToday.json();
+  const sleepYesterday = await sleepResYesterday.json();
+
+  const hrvYesterday = await hrvResYesterday.json();
+  const activityYesterday = await activityResYesterday.json();
+
+  console.log("hrvToday", hrvToday);
+  console.log("hrvYesterday", hrvYesterday);
+  console.log("activityToday", activityToday);
+  console.log("activityYesterday", activityYesterday);
+  console.log("sleepToday", sleepToday);
 
   return {
-    sleepSummary: sleep.summary,
-    heartData: heart.categories,
-    hrvData: hrv['hrv'],
-    activitySummary: activity.summary
+    sleepSummaryToday: sleepToday.summary,
+
+    hrvDataToday: hrvToday["hrv"],
+    activitySummaryToday: activityToday.summary,
+    sleepSummaryYesterday: sleepYesterday.summary,
+
+    hrvDataYesterday: hrvYesterday["hrv"],
+    activitySummaryYesterday: activityYesterday.summary,
   };
 }

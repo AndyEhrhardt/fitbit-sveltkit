@@ -47,6 +47,7 @@
 		"svelte"
 	],
 	"dependencies": {
-		"@prisma/client": "^6.7.0"
+		"@prisma/client": "^6.7.0",
+		"openai": "^4.98.0"
 	}
 }

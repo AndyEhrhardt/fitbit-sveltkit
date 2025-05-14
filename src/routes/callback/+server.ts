@@ -1,10 +1,10 @@
 import { json, redirect } from "@sveltejs/kit";
 import { env } from "$env/dynamic/private";
 
-export const GET = async ({ url }) => {
+export const GET = async ({ url, cookies }) => {
   const code = url.searchParams.get("code");
   if (!code) {
-    return json({ error: 'Missing code' }, { status: 400 });
+    return json({ error: "Missing code" }, { status: 400 });
   }
   const clientId = env.OAUTH2_CLIENT_ID;
   const clientSecret = env.FIT_BIT_SECRET;
@@ -28,8 +28,11 @@ export const GET = async ({ url }) => {
   });
 
   const data = await res.json();
-
-  console.log("Fitbit token response:", data); // access_token, refresh_token, etc.
-
-  return redirect(302, '/success'); 
+console.log("data", data);
+  cookies.set("fitbit_access_token", data.access_token, {
+    httpOnly: true,
+    path: "/",
+    maxAge: 60 * 60 * 8, // 8 hours
+  });
+  return redirect(302, "/success");
 };
