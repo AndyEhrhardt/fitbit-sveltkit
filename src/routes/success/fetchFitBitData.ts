@@ -20,9 +20,19 @@ export async function fetchFitBitData(accessToken: string) {
       fetch(`${BASE_URL}/activities/date/${yesterday}.json`, { headers }),
     ]);
 
+  if (sleepResToday.status === 429) {
+    const reset = parseInt(
+      sleepResToday.headers.get("fitbit-rate-limit-reset") || "60",
+      10
+    );
+    const waitTime = Math.ceil(reset / 60);
+    throw new Error(`🚫 Rate limit hit. Try again in ~${waitTime} minutes.`);
+  }
+
   if (!sleepResToday.ok || !hrvResToday.ok || !activityResToday.ok) {
     throw new Error("Failed to fetch one or more Fitbit endpoints for today.");
   }
+  
   if (
     !sleepResYesterday.ok ||
     !hrvResYesterday.ok ||
