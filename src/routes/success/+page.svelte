@@ -106,12 +106,14 @@
   `;
   }
   async function sendSummary() {
+    sending = true;
     const res = await fetch("success/api/submit", {
       method: "POST",
       body: new URLSearchParams({ summary: textToSend }),
     });
     const { reply } = await res.json();
     gptReply = reply;
+    sending = false;
   }
 </script>
 
