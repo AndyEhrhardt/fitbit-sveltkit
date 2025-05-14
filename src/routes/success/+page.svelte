@@ -2,19 +2,7 @@
   let gptReply = "";
   let sending = false;
 
-  async function sendSummary() {
-    sending = true;
-    const res = await fetch("?/submit", {
-      method: "POST",
-      body: new URLSearchParams({ summary: textToSend }),
-    });
-
-    const { reply } = await res.json();
-    gptReply = reply;
-    sending = false;
-  }
   export let data;
-
   const fitBitData = data.fitBitData;
 
   const compareToYesterdayTextGenerator = (
@@ -41,7 +29,12 @@
     hrvDataYesterday,
     activitySummaryYesterday,
   } = fitBitData || {};
-
+  console.log("sleepSummaryToday", sleepSummaryToday);
+  console.log("hrvDataToday", hrvDataToday);
+  console.log("activitySummaryToday", activitySummaryToday);
+  console.log("sleepSummaryYesterday", sleepSummaryYesterday);
+  console.log("hrvDataYesterday", hrvDataYesterday);
+  console.log("activitySummaryYesterday", activitySummaryYesterday);
   let textToSend = "";
 
   if (
@@ -111,6 +104,14 @@
     Fairly Active Minutes: ${activitySummaryYesterday?.fairlyActiveMinutes} \n
     Very Active Minutes Score: ${activitySummaryYesterday?.veryActiveMinutes} \n
   `;
+  }
+  async function sendSummary() {
+    const res = await fetch("success/api/submit", {
+      method: "POST",
+      body: new URLSearchParams({ summary: textToSend }),
+    });
+    const { reply } = await res.json();
+    gptReply = reply;
   }
 </script>
 

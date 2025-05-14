@@ -20,31 +20,3 @@ export async function load({ cookies }) {
 
   return { fitBitData };
 }
-
-export const actions = {
-  submit: async ({ request }) => {
-    const { summary } = await request.json();
-    console.log("Summary: asdfasdf", summary);
-    // const response = await openai.chat.completions.create({
-    //   model: "gpt-4",
-    //   messages: [
-    //     {
-    //       role: "system",
-    //       content:
-    //         "You are a friendly and knowledgeable fitness and recovery assistant.",
-    //     },
-    //     {
-    //       role: "user",
-    //       content: summary,
-    //     },
-    //   ],
-    // });
-
-    // return new Response(
-    //   JSON.stringify({ reply: response.choices[0].message.content }),
-    //   {
-    //     headers: { "Content-Type": "application/json" },
-    //   }
-    // );
-  },
-};
