@@ -13,10 +13,49 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model FitbitData {
-  id     Int      @id @default(autoincrement())
-  userId String
-  steps  Int
-  date   DateTime
+enum MessageRole {
+  user
+  assistant
 }
 
+model FitbitDailyMetrics {
+  id                   String   @id @default(cuid())
+  date                 DateTime @unique // The date the data is for
+  sleepTotal           Int // total sleep in minutes
+  sleepRem             Int
+  sleepDeep            Int
+  sleepLight           Int
+  sleepWake            Int
+  restingHeartRate     Int
+  dailyRmssd           Float // HRV (overall)
+  deepRmssd            Float // HRV during deep sleep
+  activityCal          Int // Calories from activity
+  sedentaryMinutes     Int
+  lightlyActiveMinutes Int
+  fairlyActiveMinutes  Int
+  veryActiveMinutes    Int
+  createdAt            DateTime @default(now())
+
+  session ChatSession?
+}
+
+model ChatMessage {
+  id        String      @id @default(cuid())
+  sessionId String
+  session   ChatSession @relation(fields: [sessionId], references: [id])
+  role      MessageRole // 'user' or 'assistant'
+  content   String
+  createdAt DateTime    @default(now())
+
+  @@index([sessionId])
+}
+
+model ChatSession {
+  id        String              @id @default(cuid())
+  title     String?
+  date      DateTime? // optional link to Fitbit data date
+  metricsId String              @unique
+  metrics   FitbitDailyMetrics? @relation(fields: [metricsId], references: [id])
+  createdAt DateTime            @default(now())
+  messages  ChatMessage[]
+}
