@@ -12,7 +12,7 @@ console.log("sleepSummaryToday", sleepSummaryToday);
     console.log("activitySummaryToday", activitySummaryToday);
   const savedMetrics = await prisma.fitbitDailyMetrics.create({
     data: {
-      date: new Date(),
+      date: new Date(todayDate),
       sleepTotal: sleepSummaryToday?.totalMinutesAsleep ?? 0,
       sleepRem: sleepSummaryToday?.stages?.rem ?? 0,
       sleepDeep: sleepSummaryToday?.stages?.deep ?? 0,
