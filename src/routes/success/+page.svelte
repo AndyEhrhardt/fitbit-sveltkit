@@ -29,12 +29,13 @@
     hrvDataYesterday,
     activitySummaryYesterday,
   } = fitBitData || {};
-  console.log("sleepSummaryToday", sleepSummaryToday);
-  console.log("hrvDataToday", hrvDataToday);
-  console.log("activitySummaryToday", activitySummaryToday);
-  console.log("sleepSummaryYesterday", sleepSummaryYesterday);
-  console.log("hrvDataYesterday", hrvDataYesterday);
-  console.log("activitySummaryYesterday", activitySummaryYesterday);
+  console.log("fitBitData", fitBitData);
+  // console.log("sleepSummaryToday", sleepSummaryToday);
+  // console.log("hrvDataToday", hrvDataToday);
+  // console.log("activitySummaryToday", activitySummaryToday);
+  // console.log("sleepSummaryYesterday", sleepSummaryYesterday);
+  // console.log("hrvDataYesterday", hrvDataYesterday);
+  // console.log("activitySummaryYesterday", activitySummaryYesterday);
   let textToSend = "";
 
   if (
@@ -43,7 +44,8 @@
     activitySummaryToday &&
     activitySummaryYesterday &&
     hrvDataToday &&
-    hrvDataYesterday
+    hrvDataYesterday &&
+    false
   ) {
     textToSend = `FitBit Data Summary for ${new Date().toLocaleDateString()}\n\n
   Sleep: ${sleepSummaryToday?.totalMinutesAsleep} minutes
