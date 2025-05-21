@@ -1,15 +1,11 @@
 import { prisma } from "$lib/server/prisma";
 
 export async function postFitBitData(data: any) {
-  const {
-    sleepSummaryToday,
-    hrvDataToday,
-    activitySummaryToday,
-  } = data;
+  const { sleepSummaryToday, hrvDataToday, activitySummaryToday } = data;
   const todayDate = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
-console.log("sleepSummaryToday", sleepSummaryToday);
-    console.log("hrvDataToday", hrvDataToday);
-    console.log("activitySummaryToday", activitySummaryToday);
+  console.log("sleepSummaryToday", sleepSummaryToday);
+  console.log("hrvDataToday", hrvDataToday);
+  console.log("activitySummaryToday", activitySummaryToday);
   const savedMetrics = await prisma.fitbitDailyMetrics.create({
     data: {
       date: new Date(todayDate),
