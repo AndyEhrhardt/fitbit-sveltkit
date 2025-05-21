@@ -1,53 +1,5 @@
-<script lang="ts">
-  let gptReply = "";
-  let sending = false;
-
-  export let data;
-  const fitBitData = data.fitBitData;
-
-  const compareToYesterdayTextGenerator = (
-    firstValue: number,
-    secondValue: number,
-    unit: string
-  ) => {
-    const difference = Math.abs(firstValue - secondValue);
-    const addS = difference > 1 && unit !== "bpm" ? "s" : "";
-    if (firstValue > secondValue) {
-      return `up ${difference} ${unit}${addS}`;
-    } else if (firstValue < secondValue) {
-      return `down ${difference} ${unit}${addS}`;
-    } else {
-      return "no change";
-    }
-  };
-
-  const {
-    sleepSummaryToday,
-    hrvDataToday,
-    activitySummaryToday,
-    sleepSummaryYesterday,
-    hrvDataYesterday,
-    activitySummaryYesterday,
-  } = fitBitData || {};
-  // console.log("fitBitData", fitBitData);
-  // console.log("sleepSummaryToday", sleepSummaryToday);
-  // console.log("hrvDataToday", hrvDataToday);
-  // console.log("activitySummaryToday", activitySummaryToday);
-  // console.log("sleepSummaryYesterday", sleepSummaryYesterday);
-  // console.log("hrvDataYesterday", hrvDataYesterday);
-  // console.log("activitySummaryYesterday", activitySummaryYesterday);
-  let textToSend = "";
-
-  if (
-    sleepSummaryToday &&
-    sleepSummaryYesterday &&
-    activitySummaryToday &&
-    activitySummaryYesterday &&
-    hrvDataToday &&
-    hrvDataYesterday &&
-    false
-  ) {
-    textToSend = `FitBit Data Summary for ${new Date().toLocaleDateString()}\n\n
+export const formatString = (data) => {
+  textToSend = `FitBit Data Summary for ${new Date().toLocaleDateString()}\n\n
   Sleep: ${sleepSummaryToday?.totalMinutesAsleep} minutes
   ${compareToYesterdayTextGenerator(
     sleepSummaryToday?.totalMinutesAsleep,
@@ -100,40 +52,12 @@
     )} from yesterday \n
   Activity Yesterday: \n 
     Steps: ${activitySummaryYesterday?.steps} \n
-    Calories Burned from Activity: ${activitySummaryYesterday?.activityCalories} \n
+    Calories Burned from Activity: ${
+      activitySummaryYesterday?.activityCalories
+    } \n
     Sedentary Minutes: ${activitySummaryYesterday?.sedentaryMinutes} \n
     Lightly Active Minutes: ${activitySummaryYesterday?.lightlyActiveMinutes} \n
     Fairly Active Minutes: ${activitySummaryYesterday?.fairlyActiveMinutes} \n
     Very Active Minutes Score: ${activitySummaryYesterday?.veryActiveMinutes} \n
   `;
-  }
-  async function sendSummary() {
-    sending = true;
-    const res = await fetch("success/api/submit", {
-      method: "POST",
-      body: new URLSearchParams({ summary: textToSend }),
-    });
-    const { reply } = await res.json();
-    gptReply = reply;
-    sending = false;
-  }
-</script>
-
-<h2>The Page for the Data</h2>
-
-{#if fitBitData}
-  <h2>Today's Fitbit Summary</h2>
-  {textToSend}
-  <button on:click={sendSummary} disabled={sending}>
-    {sending ? "Sending..." : "Send to ChatGPT"}
-  </button>
-{:else}
-  <p>Loading or missing data...</p>
-{/if}
-
-{#if gptReply}
-  <div class="gpt-reply">
-    <h3>GPT Response</h3>
-    <p>{gptReply}</p>
-  </div>
-{/if}
+};

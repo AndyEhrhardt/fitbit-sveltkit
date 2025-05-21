@@ -28,7 +28,7 @@ export const GET = async ({ url, cookies }) => {
   });
 
   const data = await res.json();
-  // console.log("data", data);
+  // console.log("FITBIT REFRESH", data);
   cookies.set("fitbit_access_token", data.access_token, {
     httpOnly: true,
     path: "/",

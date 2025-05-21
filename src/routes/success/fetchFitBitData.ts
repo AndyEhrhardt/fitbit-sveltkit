@@ -29,7 +29,7 @@ export async function fetchFitBitData(accessToken: string) {
       fetch(`${BASE_URL}/hrv/date/${yesterday}.json`, { headers }),
       fetch(`${BASE_URL}/activities/date/${yesterday}.json`, { headers }),
     ]);
-console.log("Raw activityToday", JSON.stringify(sleepResToday, null, 2));
+// console.log("Raw activityToday", JSON.stringify(sleepResToday, null, 2));
 
   if (sleepResToday.status === 429) {
     const reset = parseInt(

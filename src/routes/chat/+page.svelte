@@ -10,3 +10,6 @@
 
   console.log("data", data);
 </script>
+
+<h1>Chat</h1>
+
