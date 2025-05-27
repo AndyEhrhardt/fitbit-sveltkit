@@ -117,10 +117,18 @@
     gptReply = reply;
     sending = false;
   }
+  async function handleSync() {
+    const res = await fetch("/api/sync", {
+      method: "POST",
+    });
+
+    const data = await res.json();
+    console.log("Sync result:", data);
+  }
 </script>
 
 <h2>The Page for the Data</h2>
-
+<button on:click={handleSync}> Sync that Data DAWG </button>
 {#if fitBitData}
   <h2>Today's Fitbit Summary</h2>
   {textToSend}
