@@ -3,6 +3,7 @@ import { exchangeCodeForToken } from "$lib/fitbit/fitbitClient";
 import { syncFitbitAndSummarize } from "$lib/jobs/syncFitbit";
 export const GET = async ({ url, cookies }) => {
   const temporaryAuthorizationCode = url.searchParams.get("code");
+  
   if (!temporaryAuthorizationCode) {
     return json({ error: "Missing temporaryAuthorizationCode" }, { status: 400 });
   }
@@ -12,7 +13,7 @@ export const GET = async ({ url, cookies }) => {
     
     return redirect(302, "/success");
   } catch (err) {
-    console.error("OAuth error:", err);
+    console.error("Error within syncFitbitAndSummarize", err);
     return json({ error: "OAuth token exchange failed" }, { status: 500 });
   }
 };

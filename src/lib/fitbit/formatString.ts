@@ -1,5 +1,27 @@
-export const formatString = (data) => {
-  console.log("Data inside formatString", data);
+import dayjs from "dayjs";
+
+export type FitbitDailyMetrics = {
+  id: string;
+  date: Date;
+  sleepTotal: number;
+  sleepRem: number;
+  sleepDeep: number;
+  sleepLight: number;
+  sleepWake: number;
+  restingHeartRate: number;
+  dailyRmssd: number;
+  deepRmssd: number;
+  activityCal: number;
+  sedentaryMinutes: number;
+  lightlyActiveMinutes: number;
+  fairlyActiveMinutes: number;
+  veryActiveMinutes: number;
+  createdAt: Date;
+};
+
+export const formatString = (yesterdaysMetrics: FitbitDailyMetrics, todaysMetrics: FitbitDailyMetrics) => {
+  console.log("Data inside formatString", todaysMetrics, yesterdaysMetrics);
+  console.log(`FitBit Data Summary for yesterday ${dayjs(yesterdaysMetrics.createdAt)}`)
   // textToSend = `FitBit Data Summary for ${new Date().toLocaleDateString()}\n\n
   // Sleep: ${sleepSummaryToday?.totalMinutesAsleep} minutes
   // ${compareToYesterdayTextGenerator(

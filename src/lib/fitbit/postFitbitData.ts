@@ -9,7 +9,7 @@ export async function  postFitBitData(data: any) {
   // console.log("activitySummaryToday", activitySummaryToday);
   const savedMetrics = await prisma.fitbitDailyMetrics.create({
     data: {
-      date: dayjs().startOf('day').subtract(2, 'day').toDate().toISOString(),
+      date: dayjs().toDate().toISOString(),
       sleepTotal: sleepSummaryToday?.totalMinutesAsleep ?? 0,
       sleepRem: sleepSummaryToday?.stages?.rem ?? 0,
       sleepDeep: sleepSummaryToday?.stages?.deep ?? 0,

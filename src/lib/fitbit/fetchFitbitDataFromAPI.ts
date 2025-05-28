@@ -1,8 +1,8 @@
 const BASE_URL = "https://api.fitbit.com/1/user/-";
 import dayjs from "dayjs";
 
-export async function fetchFitbitDataFromAPI(accessToken: string) {
-  const today = dayjs().startOf('day').subtract(2, 'day').format('YYYY-MM-DD');
+export async function fetchFitbitDataFromAPI(accessToken: string, date?: string) {
+  const today = date || dayjs().format('YYYY-MM-DD');
   // const today = new Date().toISOString().split("T")[0];
   const yesterday = new Date(Date.now() - 86400000).toISOString().split("T")[0];
 console.log(today, yesterday)

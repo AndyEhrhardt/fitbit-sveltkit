@@ -59,3 +59,10 @@ model ChatSession {
   createdAt DateTime            @default(now())
   messages  ChatMessage[]
 }
+
+
+model Workout {
+  id        String              @id @default(cuid())
+  
+  createdAt DateTime            @default(now())
+}

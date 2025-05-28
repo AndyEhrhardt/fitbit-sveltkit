@@ -1,26 +1,31 @@
 // src/lib/jobs/syncFitbit.ts
-import { exchangeCodeForToken } from "$lib/fitbit/fitbitClient";
+import {
+  exchangeCodeForToken,
+  refreshFitbitAccessToken,
+} from "$lib/fitbit/fitbitClient";
 import { fetchFitbitDataFromAPI } from "$lib/fitbit/fetchFitbitDataFromAPI";
 import { postFitBitData } from "$lib/fitbit/postFitbitData";
-import { formatString } from "$lib/fitbit/formatString";
-import { prisma } from "$lib/server/prisma";
 
 export async function syncFitbitAndSummarize(
-  temporaryAuthorizationCode: string
+  temporaryAuthorizationCode?: string
 ) {
   console.log("Syncing Fitbit data...");
-
+  let access_token: string;
   // TODO: uncomment this when done testing
-  const { access_token } = await exchangeCodeForToken(
-    temporaryAuthorizationCode
-  );
+  // if temporaryAuthorizationCode is not provided, use the refresh token
+  // 1. If we have a temporary authorization code, exchange it for an access token, otherwise use the refresh token
+  if (temporaryAuthorizationCode) {
+    const tokens = await exchangeCodeForToken(temporaryAuthorizationCode);
+    access_token = tokens.access_token;
+  } else {
+    const tokens = await refreshFitbitAccessToken();
+    access_token = tokens.access_token;
+    // Optional: persist tokens.refresh_token again, since it rotates
+  }
+  // 2. Pull Fitbit data from the Fitbit API
+  const fitbitData = await fetchFitbitDataFromAPI(access_token);
 
-  // 1. Pull Fitbit data from the Fitbit API
-  const fitbitData = await fetchFitbitDataFromAPI(
-    temporaryAuthorizationCode
-  );
-
-  // 2. Save Fitbit metrics to DB
+  // 3. Save Fitbit metrics to DB
   const savedMetrics = await postFitBitData(fitbitData);
 
   console.log("Saved metrics:", savedMetrics);
