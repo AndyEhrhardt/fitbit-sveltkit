@@ -60,9 +60,28 @@ model ChatSession {
   messages  ChatMessage[]
 }
 
+model WorkoutSession {
+  id        String            @id @default(cuid())
+  createdAt DateTime          @default(now())
+  exercises WorkoutExercise[]
+}
 
-model Workout {
-  id        String              @id @default(cuid())
-  
-  createdAt DateTime            @default(now())
+model Movement {
+  id        String            @id @default(cuid())
+  name      String // push-up, squat, etc.
+  exercises WorkoutExercise[] // relation field: one-to-many
+}
+
+model WorkoutExercise {
+  id               String   @id @default(cuid())
+  workoutSessionId String
+  movementId       String
+  sets             Int
+  reps             Int
+  weight           Float?
+  notes            String?
+  createdAt        DateTime @default(now())
+
+  workoutSession WorkoutSession @relation(fields: [workoutSessionId], references: [id])
+  movement       Movement       @relation(fields: [movementId], references: [id])
 }

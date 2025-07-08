@@ -7,12 +7,12 @@ const openai = new OpenAI({ apiKey: env.OPENAI_API_KEY });
 
 export async function sendSummary(summary: string): Promise<string> {
   const response = await openai.chat.completions.create({
-    model: "gpt-4-1",
+    model: "gpt-4.1",
     messages: [
       {
         role: "system",
         content:
-          "You are a friendly and knowledgeable fitness coach. Give me recommendations for whether or not I should be working out today, based on the user's Fitbit data.",
+          "You are a friendly and knowledgeable fitness coach. Give me recommendations for workouts based on previous workouts shared with you as well as my FitBit data (look at stats like HRV and resting HR to gauge recovery) My fitness goal is hypertrophy.",
       },
       {
         role: "user",

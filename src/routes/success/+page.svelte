@@ -136,8 +136,8 @@
 </script>
 
 <h2>The Page for the Data</h2>
-<button on:click={handleSync}> Sync that Data DAWG </button>
-<button on:click={handleSummarize}> Summarize that Data DAWG </button>
+<button on:click={handleSync} class="btn preset-filled-primary-500"> Sync that Data DAWG </button>
+<button on:click={handleSummarize} class="btn preset-filled-primary-500"> Summarize that Data DAWG </button>
 {#if fitBitData}
   <h2>Today's Fitbit Summary</h2>
   {textToSend}
