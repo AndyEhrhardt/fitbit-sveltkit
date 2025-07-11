@@ -1,11 +1,11 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { prisma } from "$lib/server/prisma"; // Adjust the import based on your project structure
 
-// export const load = async () => {
-//     const entries = await prisma.movement.findMany();
+export const load = async () => {
+  const entries = await prisma.movement.findMany();
 
-//     return { entries };
-//   };
+  return { entries };
+};
 
 export const actions = {
   submit: async ({ request }) => {
@@ -31,48 +31,41 @@ export const actions = {
     }
   },
 
-  //   delete: async ({ request }) => {
-  //     const formData = await request.formData();
-  //     const id = Number(formData.get('id'));
+  delete: async ({ request }) => {
+    const formData = await request.formData();
+    const id = String(formData.get("id"));
 
-  //     if (isNaN(id)) {
-  //       return fail(400, { error: 'Invalid ID.' });
-  //     }
+    try {
+      await prisma.movement.delete({
+        where: { id },
+      });
 
-  //     try {
-  //       await prisma.fitbitData.delete({
-  //         where: { id }
-  //       });
+      return { success: true, message: "Movement deleted successfully." };
+    } catch (error) {
+      console.error("Error deleting entry:", error);
+      return fail(500, { error: "Could not delete entry." });
+    }
+  },
+  edit: async ({ request }) => {
+    const formData = await request.formData();
+    const id = String(formData.get("id"));
+    const name = String(formData.get("name"));
+    console.log(id, name);
+    if (typeof id !== "string" || typeof name !== "string") {
+      return fail(400, { error: "Invalid input." });
+    }
 
-  //       throw redirect(303, '/steps');
-  //     } catch (error) {
-  //       console.error('Error deleting entry:', error);
-  //       return fail(500, { error: 'Could not delete entry.' });
-  //     }
-  //   },
-  //   edit: async ({ request }) => {
-  //     const formData = await request.formData();
-  //     const id = Number(formData.get('id'));
-  //     const steps = Number(formData.get('steps'));
-  //     const date = new Date(formData.get('date') as string);
-
-  //     if (isNaN(id) || isNaN(steps) || isNaN(date.getTime())) {
-  //       return fail(400, { error: 'Invalid input.' });
-  //     }
-
-  //     try {
-  //       await prisma.fitbitData.update({
-  //         where: { id },
-  //         data: {
-  //           steps,
-  //           date
-  //         }
-  //       });
-
-  //       throw redirect(303, '/steps');
-  //     } catch (error) {
-  //       console.error('Error updating entry:', error);
-  //       return fail(500, { error: 'Update failed.' });
-  //     }
-  //   }
+    try {
+      await prisma.movement.update({
+        where: { id },
+        data: {
+          name,
+        },
+      });
+      return { success: true, message: "Movement updated successfully." };
+    } catch (error) {
+      console.error("Error updating entry:", error);
+      return fail(500, { error: "Update failed." });
+    }
+  },
 };
